@@ -2,6 +2,8 @@
 	import '../app.css';
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
+	import { markHydrated } from '$lib/client';
 	import favicon from '$lib/assets/favicon.svg';
 	import TabBar from '$lib/components/TabBar.svelte';
 
@@ -9,6 +11,8 @@
 
 	const TAB_SCREENS = new Set(['/', '/open', '/jar']);
 	const showTabs = $derived(TAB_SCREENS.has(page.route.id ?? ''));
+
+	onMount(markHydrated);
 
 	// The jar is shared between devices: refresh when this one comes back into view.
 	function onVisibilityChange() {

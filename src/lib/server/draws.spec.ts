@@ -6,6 +6,8 @@ import {
 	abandonDraw,
 	DrawStateError,
 	expireStaleDraws,
+	getDrawView,
+	shuffleSample,
 	skipDraw,
 	STALE_DRAW_MS,
 	startDraw,
@@ -153,5 +155,34 @@ describe('abandonDraw and expireStaleDraws', () => {
 		startDraw(db, 5, { now: new Date(t0.getTime() + STALE_DRAW_MS + 1) });
 		expect(drawRow(old.drawId).outcome).toBe('abandoned');
 		expect(db.select().from(task).all()).toHaveLength(1);
+	});
+});
+
+describe('getDrawView', () => {
+	it('returns the draw with its task and whether it followed a skip', () => {
+		createTask(db, { title: 'A', minutes: 5 });
+		createTask(db, { title: 'B', minutes: 5 });
+		const first = startDraw(db, 5);
+		expect(getDrawView(db, first.drawId)).toMatchObject({
+			minutes: 5,
+			task: { id: first.task!.id },
+			afterSkip: false
+		});
+		const second = skipDraw(db, first.drawId);
+		expect(getDrawView(db, second.drawId)?.afterSkip).toBe(true);
+		const empty = skipDraw(db, second.drawId);
+		expect(getDrawView(db, empty.drawId)).toMatchObject({ task: null, afterSkip: true });
+		expect(getDrawView(db, 999)).toBeUndefined();
+	});
+});
+
+describe('shuffleSample', () => {
+	it('returns jar titles only, up to the limit', () => {
+		for (let i = 0; i < 5; i++) createTask(db, { title: `T${i}`, minutes: 5 });
+		const open = createTask(db, { title: 'Open one', minutes: 5 });
+		db.update(task).set({ status: 'open' }).where(eq(task.id, open.id)).run();
+		const sample = shuffleSample(db, 3);
+		expect(sample).toHaveLength(3);
+		expect(shuffleSample(db).map((t) => t.title)).not.toContain('Open one');
 	});
 });
