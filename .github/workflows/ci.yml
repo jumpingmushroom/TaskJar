@@ -68,6 +68,8 @@ jobs:
           sleep 5
           curl -fsS http://localhost:3000/jar | grep -q 'Water the plants'
       - name: Unraid-style run (root-owned appdata, PUID 99 / PGID 100)
+        env:
+          ORIGIN: http://localhost:3000
         run: |
           set -e
           docker compose down
