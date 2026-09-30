@@ -192,4 +192,114 @@
 		font-size: 14px;
 		font-weight: 700;
 	}
+
+	/* Tablet / wall panel, landscape (DESIGN §7): intro on the left, the tiles
+	   stacked large on the right, sharing the height in the 180:224:268 ratio. */
+	@media (min-width: 1024px) and (orientation: landscape) {
+		.home {
+			display: grid;
+			grid-template-columns: 400px 1fr;
+			gap: 48px;
+			height: 100%;
+			padding: 56px;
+		}
+
+		.intro {
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+		}
+
+		.intro :global(.logo svg) {
+			width: 48px;
+			height: 48px;
+		}
+
+		.intro :global(.wordmark) {
+			font-size: 34px !important;
+			letter-spacing: -0.8px;
+		}
+
+		.headline {
+			margin-top: 64px;
+			font-size: 72px;
+			line-height: 0.98;
+			letter-spacing: -2.5px;
+		}
+
+		.lead {
+			margin-top: 18px;
+			font-size: 22px;
+		}
+
+		.pills {
+			gap: 12px;
+			margin-top: auto;
+			padding-top: 24px;
+		}
+
+		.pill {
+			padding: 14px 20px;
+			border-width: 3px;
+			font-size: 18px;
+		}
+
+		.open-pill {
+			padding: 14px 22px;
+			border-width: 3px;
+		}
+
+		.tiles {
+			gap: 18px;
+			min-height: 0;
+			margin: 0;
+		}
+
+		.tile {
+			height: auto !important;
+			min-height: 120px;
+			padding: 0 36px 0 40px;
+			border-width: 4px;
+			border-radius: 40px;
+			box-shadow: var(--shadow-lg);
+			gap: 18px;
+			transform: rotate(calc(var(--tilt) * 0.6));
+		}
+
+		.tile.s {
+			flex: 180 1 0;
+		}
+
+		.tile.m {
+			flex: 224 1 0;
+		}
+
+		.tile.l {
+			flex: 268 1 0;
+		}
+
+		.num {
+			letter-spacing: -6px;
+		}
+
+		.s .num {
+			font-size: 130px;
+		}
+
+		.m .num {
+			font-size: 156px;
+		}
+
+		.l .num {
+			font-size: 184px;
+		}
+
+		.unit .disp {
+			font-size: 36px;
+		}
+
+		.or-less {
+			font-size: 20px;
+		}
+	}
 </style>

@@ -32,3 +32,9 @@ taskjar-handoff/
 
 # Local Claude Code settings
 .claude/settings.local.json
+
+# Playwright
+/.e2e
+/test-results
+/playwright-report
+/playwright/.cache
