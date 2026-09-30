@@ -63,6 +63,13 @@
 		color: var(--tab-active-fg);
 	}
 
+	@media (min-width: 1024px) and (orientation: landscape) {
+		nav {
+			justify-content: center;
+			gap: 48px;
+		}
+	}
+
 	.count {
 		position: absolute;
 		top: 2px;

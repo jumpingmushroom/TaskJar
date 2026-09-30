@@ -183,3 +183,26 @@ test('home splits into two columns on a landscape tablet', async ({ page }) => {
 	expect(tile!.x).toBeGreaterThan(headline!.x + headline!.width);
 	expect(tile!.y + tile!.height).toBeLessThanOrEqual(820);
 });
+
+test('open and jar use the full width on a desktop', async ({ page }) => {
+	await addTask(page, 'Sort the mail pile', 10);
+	await addTask(page, 'Dust the shelves', 15);
+	await page.setViewportSize({ width: 1440, height: 900 });
+
+	await page.goto('/jar');
+	const rows = page.locator('.row');
+	const [first, second] = [await rows.nth(0).boundingBox(), await rows.nth(1).boundingBox()];
+	// Rows sit side by side in a grid instead of one narrow column.
+	expect(second!.y).toBe(first!.y);
+	expect(second!.x).toBeGreaterThan(first!.x + first!.width);
+
+	await page.goto('/open');
+	const columns = await page
+		.locator('.list')
+		.evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+	expect(columns).toBeGreaterThanOrEqual(2);
+
+	// The tab bar spans the window on every tab.
+	const nav = await page.getByRole('navigation', { name: 'Sections' }).boundingBox();
+	expect(nav!.width).toBe(1440);
+});
