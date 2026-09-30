@@ -60,6 +60,8 @@ jobs:
           # Wrong origin is rejected, so ORIGIN matters.
           [ "$(curl -s -o /dev/null -w '%{http_code}' -H 'Origin: http://evil.example' -X POST http://localhost:3000/jar/new -d 'title=x&minutes=5')" = 403 ]
           curl -fsS http://localhost:3000/jar | grep -q 'Water the plants'
+          # The app serves its own icon (Unraid Icon URL, apple-touch-icon).
+          curl -fsS http://localhost:3000/icon.png | file - | grep -q PNG
       - name: Data survives a restart
         env:
           ORIGIN: http://localhost:3000
@@ -90,7 +92,7 @@ jobs:
       - name: Unraid template ships in the image and is valid XML
         run: |
           docker run --rm --entrypoint cat taskjar:latest /app/unraid/taskjar.xml > taskjar.xml
-          python3 -c "import sys, xml.etree.ElementTree as ET; r = ET.parse('taskjar.xml').getroot(); assert r.findtext('Repository') == 'ghcr.io/jumpingmushroom/taskjar:latest'"
+          python3 -c "import sys, xml.etree.ElementTree as ET; r = ET.parse('taskjar.xml').getroot(); assert r.findtext('Repository') == 'ghcr.io/jumpingmushroom/taskjar:latest'; assert r.findtext('Icon').startswith('https://'), 'Unraid needs an icon URL, not a file path'"
           docker run --rm --entrypoint cat taskjar:latest /app/unraid/icon.png | file - | grep -q PNG
       - name: Logs
         if: always()

@@ -32,6 +32,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<link rel="apple-touch-icon" href="/icon.png" />
 	{#if themeState.forced}
 		<meta name="theme-color" content={THEME_COLORS[themeState.forced]} />
 	{:else}
