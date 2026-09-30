@@ -85,7 +85,7 @@ jobs:
           [ "$(curl -s -o /dev/null -w '%{http_code}' -H 'Accept: text/html' -H 'Origin: http://localhost:3001' -X POST http://localhost:3001/jar/new -d 'title=Unraid task&minutes=10')" = 303 ]
           # The app process runs as 99:100 and owns its data.
           [ "$(stat -c '%u:%g' /tmp/appdata/taskjar/taskjar.db)" = 99:100 ]
-          [ "$(docker top unraid -o uid,gid,cmd | awk '/node build/ {print $1":"$2}')" = 99:100 ]
+          [ "$(docker top unraid -o pid,uid,gid,cmd | awk '/node build/ {print $2":"$3}')" = 99:100 ]
       - name: Unraid template ships in the image and is valid XML
         run: |
           docker run --rm --entrypoint cat taskjar:latest /app/unraid/taskjar.xml > taskjar.xml
