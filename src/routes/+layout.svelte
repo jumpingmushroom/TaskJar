@@ -11,6 +11,8 @@
 
 	const TAB_SCREENS = new Set(['/', '/open', '/jar']);
 	const showTabs = $derived(TAB_SCREENS.has(page.route.id ?? ''));
+	// Home gets the two-column layout on landscape tablets (SPEC §5).
+	const wide = $derived(page.route.id === '/');
 
 	onMount(markHydrated);
 
@@ -28,7 +30,7 @@
 
 <svelte:document onvisibilitychange={onVisibilityChange} />
 
-<div class="app">
+<div class="app" class:wide>
 	<main>
 		{@render children()}
 	</main>
@@ -47,10 +49,18 @@
 		margin: 0 auto;
 	}
 
+	@media (min-width: 1024px) and (orientation: landscape) {
+		.app.wide {
+			max-width: none;
+			height: 100dvh;
+		}
+	}
+
 	main {
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
+		min-height: 0;
 		padding-top: env(safe-area-inset-top);
 	}
 </style>

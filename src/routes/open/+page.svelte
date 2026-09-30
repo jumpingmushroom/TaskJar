@@ -16,6 +16,7 @@
 	const DONE_MS = 560;
 
 	let finishing = $state<number | null>(null);
+	let heading: HTMLHeadingElement;
 
 	// Render with the server's clock, then switch to the viewer's local day.
 	let now = $state(new Date());
@@ -36,7 +37,7 @@
 </svelte:head>
 
 <section class="screen">
-	<h1 class="title heading">Open tasks</h1>
+	<h1 class="title heading" tabindex="-1" bind:this={heading}>Open tasks</h1>
 	<p class="subline">Tap the check when it's done.</p>
 
 	{#if data.tasks.length > 0}
@@ -61,6 +62,8 @@
 								if (left > 0) await new Promise((r) => setTimeout(r, left));
 								await update();
 								finishing = null;
+								// The pressed button is gone; keep keyboard focus on the screen.
+								heading.focus();
 							};
 						}}
 					>
@@ -101,6 +104,10 @@
 <style>
 	.heading {
 		margin-top: 14px;
+	}
+
+	.heading:focus {
+		outline: none;
 	}
 
 	.list {

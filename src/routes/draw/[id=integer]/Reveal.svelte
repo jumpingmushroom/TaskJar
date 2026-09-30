@@ -102,6 +102,9 @@
 	</div>
 
 	<div class="stage">
+		<p class="visually-hidden" role="status">
+			{#if task && phase === 'landed'}Your task: {task.title}, {task.minutes} minutes.{/if}
+		</p>
 		{#if gone}
 			<p class="gone pop-in" role="status">Someone else took that one. Here's another.</p>
 		{/if}
