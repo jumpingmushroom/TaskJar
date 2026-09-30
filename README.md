@@ -85,6 +85,8 @@ docker run --rm --entrypoint cat ghcr.io/jumpingmushroom/taskjar:latest /app/unr
   > /var/lib/docker/unraid/images/TaskJar-icon.png
 ```
 
+The second command pre-caches the icon. Unraid needs the template's `Icon` to be a URL, not a file path, and while this repository is private that URL can't be downloaded. If the icon ever shows as a question mark, set **Icon URL** in the template to `http://<server-ip>:<port>/icon.png` (TaskJar serves its own icon).
+
 Then go to **Docker → Add Container**, pick **TaskJar** from the template list, and set **App URL** to the exact address you'll open (for example `http://192.168.1.20:3000`, matching the WebUI port). Data goes to `/mnt/user/appdata/taskjar`, and the app runs as `nobody:users` (99:100). Unraid's normal "update available" check picks up new builds.
 
 ### Docker Compose
