@@ -32,12 +32,12 @@ The template and icon ship inside the image. Install them from the Unraid termin
 ```sh
 docker run --rm --entrypoint cat ghcr.io/jumpingmushroom/taskjar:latest /app/unraid/taskjar.xml \
   > /boot/config/plugins/dockerMan/templates-user/my-TaskJar.xml
-mkdir -p /boot/config/plugins/dockerMan/images
+mkdir -p /var/lib/docker/unraid/images
 docker run --rm --entrypoint cat ghcr.io/jumpingmushroom/taskjar:latest /app/unraid/icon.png \
-  > /boot/config/plugins/dockerMan/images/TaskJar-icon.png
+  > /var/lib/docker/unraid/images/TaskJar-icon.png
 ```
 
-Then go to **Docker → Add Container**, pick **TaskJar** from the template list, and set **App URL** to the exact address you'll open, such as `http://192.168.1.20:3000`, matching the WebUI port. Data goes to `/mnt/user/appdata/taskjar`, and the app runs as `nobody:users` (PUID 99 / PGID 100). Unraid's normal "update available" check picks up new builds of `:latest`.
+Then go to **Docker → Add Container**, pick **TaskJar** from the template list, and set **App URL** to the exact address you'll open, such as `http://192.168.1.20:3000`, matching the WebUI port. (The live install uses `http://192.168.3.3:3033`, because 3000 is taken on that server.) Data goes to `/mnt/user/appdata/taskjar`, and the app runs as `nobody:users` (PUID 99 / PGID 100). Unraid's normal "update available" check picks up new builds of `:latest`.
 
 ### Docker Compose
 
