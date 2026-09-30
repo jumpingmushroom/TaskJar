@@ -86,7 +86,7 @@ export function deleteTask(db: Db, id: number): void {
 	if (!deleted) throw new TaskNotFoundError(id);
 }
 
-/** Marks an open task as done. The record is kept (SPEC §3). */
+/** Marks an open task as done. The record is kept for later features (recurring, stats). */
 export function completeTask(db: Db, id: number, now = new Date()): Task {
 	const done = db
 		.update(task)

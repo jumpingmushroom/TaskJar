@@ -14,7 +14,7 @@
 	const TAB_SCREENS = new Set(['/', '/open', '/jar']);
 	const showTabs = $derived(TAB_SCREENS.has(page.route.id ?? ''));
 	// Tab screens use the full width on landscape tablets and desktops; Home
-	// also fills the viewport height for its two-column layout (SPEC §5).
+	// also fills the viewport height for its two-column layout.
 	const wide = $derived(showTabs);
 	const fill = $derived(page.route.id === '/');
 

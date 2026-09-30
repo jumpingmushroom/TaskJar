@@ -71,6 +71,9 @@ Every draw is logged (taken, skipped, abandoned or empty), and each task counts 
 
 ## Install
 
+> [!IMPORTANT]
+> TaskJar has **no login**: anyone who can reach it can read and change the jar. Run it on your home network only, and use a VPN or an authenticating reverse proxy if you need remote access. See [SECURITY.md](SECURITY.md).
+
 The image is published to `ghcr.io/jumpingmushroom/taskjar` on every change to `main` that passes CI (`latest`, `sha-<commit>`), and on releases (`X.Y.Z`, `X.Y`).
 
 ### Unraid
@@ -85,7 +88,7 @@ docker run --rm --entrypoint cat ghcr.io/jumpingmushroom/taskjar:latest /app/unr
   > /var/lib/docker/unraid/images/TaskJar-icon.png
 ```
 
-The second command pre-caches the icon. Unraid needs the template's `Icon` to be a URL, not a file path, and while this repository is private that URL can't be downloaded. If the icon ever shows as a question mark, set **Icon URL** in the template to `http://<server-ip>:<port>/icon.png` (TaskJar serves its own icon).
+The second command pre-caches the icon; Unraid otherwise downloads it from the template's icon URL. If the icon ever shows as a question mark, set **Icon URL** in the template to `http://<server-ip>:<port>/icon.png` (TaskJar serves its own icon).
 
 Then go to **Docker → Add Container**, pick **TaskJar** from the template list, and set **App URL** to the exact address you'll open (for example `http://192.168.1.20:3000`, matching the WebUI port). Data goes to `/mnt/user/appdata/taskjar`, and the app runs as `nobody:users` (99:100). Unraid's normal "update available" check picks up new builds.
 
@@ -163,6 +166,15 @@ Planned after the MVP, roughly in this order:
 - **People:** profiles, assignees ("anyone" or a person), and a household draw.
 - **Seasonal tasks and ordered sequences:** a big job split into parts that unlock in order.
 - **Wall panel:** a Home Assistant card that opens TaskJar.
+
+## Contributing
+
+Issues and pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Credits
+
+- Fonts: [Bricolage Grotesque](https://github.com/ateliertriay/bricolage) and [Figtree](https://github.com/erikdkennedy/figtree), both under the SIL Open Font License 1.1, self-hosted via [Fontsource](https://fontsource.org/).
+- Built with [SvelteKit](https://svelte.dev/), [Drizzle ORM](https://orm.drizzle.team/) and [better-sqlite3](https://github.com/WiseLibs/better-sqlite3).
 
 ## Support
 
