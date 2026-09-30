@@ -9,8 +9,17 @@ Household "task jar" web app: add small tasks (1–30 min), pick how much time y
 - `npm run check`: svelte-check / TypeScript
 - `npm run lint` / `npm run format`: Prettier + ESLint
 - `npm run build`: production build (`adapter-node`, output in `build/`)
+- `npm run db:generate`: generate a migration in `drizzle/` after changing `src/lib/server/db/schema.ts` (commit both). Migrations run automatically at server start.
 
 Run `npm run check`, `npm run lint` and `npm test` before opening a PR.
+
+## Layout
+
+- `src/lib/task.ts`: shared task rules and `validateTask` (runs in browser and server)
+- `src/lib/draw.ts`: pure draw logic (candidates, weighted pick, skip exclusion)
+- `src/lib/server/db/`: Drizzle schema and `getDb()` (SQLite via better-sqlite3; `DATABASE_URL` is a file path, default `data/taskjar.db`)
+- `src/lib/server/tasks.ts`, `src/lib/server/draws.ts`: repositories; routes never query the DB directly
+- Repository tests use `openDb(':memory:')`, which applies the real migrations
 
 ## Git workflow
 
