@@ -8,7 +8,10 @@ declare global {
 			actor: null;
 		}
 		// interface PageData {}
-		// interface PageState {}
+		interface PageState {
+			/** A task to animate into a list after a client-side hop (Go! → Open). */
+			highlight?: number;
+		}
 		// interface Platform {}
 	}
 }
