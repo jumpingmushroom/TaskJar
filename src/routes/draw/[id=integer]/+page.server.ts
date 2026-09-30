@@ -52,7 +52,7 @@ export const actions: Actions = {
 			if (e instanceof DrawStateError) redirect(303, '/');
 			throw e;
 		}
-		if (result.ok) redirect(303, `/open?highlight=${result.task.id}`);
+		if (result.ok) redirect(303, `/go/${result.task.id}`);
 		// Someone else got there first: pull again for the same time.
 		const minutes = getDrawView(db, id)!.minutes;
 		redirect(303, `/draw/${startDraw(db, minutes).drawId}?gone`);

@@ -4,14 +4,16 @@ import { page } from '$app/state';
 import { onMount } from 'svelte';
 
 /**
- * Reads `?highlight=<id>` (a task that was just added or taken) so the list
- * can animate it in once, then drops the query from the address bar so a
- * reload doesn't replay the animation.
+ * Finds a task that was just added or taken, so the list can animate it in
+ * once. It arrives as page state (client-side hops) or as `?highlight=<id>`
+ * (server redirects, plain links); the query is then dropped from the address
+ * bar so a reload doesn't replay the animation.
  */
 export function useHighlight(route: '/jar' | '/open') {
-	const id = Number(page.url.searchParams.get('highlight')) || null;
+	const fromQuery = Number(page.url.searchParams.get('highlight')) || null;
+	const id = page.state.highlight ?? fromQuery;
 	onMount(() => {
-		if (id !== null) replaceState(resolve(route), page.state);
+		if (fromQuery !== null) replaceState(resolve(route), {});
 	});
 	return id;
 }
