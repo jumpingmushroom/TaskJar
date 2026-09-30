@@ -145,7 +145,14 @@
 
 	<div class="actions">
 		{#if task}
-			<form method="POST" class="action-form" use:enhance={submitting}>
+			<!-- Like the prototype, the buttons only appear once the card has landed. -->
+			<form
+				method="POST"
+				class="action-form"
+				class:waiting={phase === 'shuffle'}
+				aria-hidden={phase === 'shuffle' ? 'true' : undefined}
+				use:enhance={submitting}
+			>
 				<button
 					class="press btn btn-primary"
 					formaction="?/take"
@@ -260,8 +267,21 @@
 		margin-top: 12px;
 	}
 
-	.btn-primary:disabled,
-	.btn:disabled {
-		opacity: 1;
+	.waiting {
+		visibility: hidden;
+	}
+
+	/* Disabled only while a request is in flight: keep the normal look. */
+	.action-form .btn:disabled {
+		background: var(--surface);
+		color: var(--text);
+		box-shadow: var(--shadow-sm);
+		cursor: progress;
+	}
+
+	.action-form .btn-primary:disabled {
+		background: var(--primary);
+		color: var(--on-fill);
+		box-shadow: var(--shadow);
 	}
 </style>
