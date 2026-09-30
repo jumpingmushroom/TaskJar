@@ -22,7 +22,13 @@ Run `npm run check`, `npm run lint` and `npm test` before opening a PR.
 - `src/lib/server/tasks.ts`, `src/lib/server/draws.ts`: repositories; routes never query the DB directly
 - Repository tests use `openDb(':memory:')`, which applies the real migrations
 
-## Deployment gotcha
+## Deployment
+
+- Runs natively on the user's Unraid server from `ghcr.io/jumpingmushroom/taskjar:latest`, using the template in `unraid/taskjar.xml` (shipped inside the image). CI's `publish` job pushes the image only from `main`, after the `check` and `docker` jobs pass. There is no Dokploy or Kubernetes deployment for this app.
+- The container starts as root, chowns `/data` to `PUID:PGID` (Unraid: 99:100) and drops privileges in `docker/entrypoint.sh`. Keep that working when you change the Dockerfile.
+- If you change settings the template exposes (port, env vars, paths), update `unraid/taskjar.xml` as well.
+
+### ORIGIN gotcha
 
 `adapter-node` assumes `https://` unless `ORIGIN` is set, and SvelteKit then rejects every form action as cross-site (403). Always set `ORIGIN` to the exact URL users open. The dev server is not affected, so this only shows up in production builds.
 
