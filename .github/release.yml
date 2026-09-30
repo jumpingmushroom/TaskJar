@@ -1,0 +1,13 @@
+# Groups auto-generated release notes by PR label.
+changelog:
+  categories:
+    - title: Features
+      labels: [enhancement]
+    - title: Fixes
+      labels: [bug]
+    - title: Documentation
+      labels: [documentation]
+    - title: Build, CI and maintenance
+      labels: [chore, ci, dependencies]
+    - title: Other changes
+      labels: ['*']
