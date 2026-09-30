@@ -58,8 +58,10 @@
 	--tabbar-height: 84px;
 }
 
+/* Dark theme: follows the system unless the user picked a theme on this device
+   (data-theme on <html>, set from the theme cookie). The two blocks must stay identical. */
 @media (prefers-color-scheme: dark) {
-	:root {
+	:root:not([data-theme='light']) {
 		color-scheme: dark;
 
 		--bg: #17122b;
@@ -85,6 +87,37 @@
 		--pill-open-bg: #fff4e0;
 		--pill-open-fg: #1b1433;
 	}
+}
+
+:root[data-theme='dark'] {
+	color-scheme: dark;
+
+	--bg: #17122b;
+	--surface: #251d45;
+	--text: #fff4e0;
+	--edge: #0a0716;
+	--muted: #bdb5d6;
+
+	--check-idle: #7d7399;
+	--error: #ff7d9b;
+	--disabled-bg: #3a2f66;
+	--disabled-fg: #bdb5d6;
+	--focus: #a48dff;
+
+	--soft: #17122b;
+	--jar-glass: #fff4e0;
+	--track: rgb(255 244 224 / 0.2);
+
+	--tab-active-bg: #ffd23f;
+	--tab-active-fg: #1b1433;
+	--pill-jar-bg: #251d45;
+	--pill-jar-border: #3a2f66;
+	--pill-open-bg: #fff4e0;
+	--pill-open-fg: #1b1433;
+}
+
+:root[data-theme='light'] {
+	color-scheme: light;
 }
 
 /* ---------- Base ---------- */

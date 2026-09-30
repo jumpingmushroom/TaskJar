@@ -1,6 +1,17 @@
 <script lang="ts" module>
 	export type IconName =
-		'plus' | 'back' | 'chevron' | 'check' | 'skip' | 'draw' | 'open' | 'jar' | 'split' | 'minus';
+		| 'plus'
+		| 'back'
+		| 'chevron'
+		| 'check'
+		| 'skip'
+		| 'draw'
+		| 'open'
+		| 'jar'
+		| 'split'
+		| 'minus'
+		| 'sun'
+		| 'moon';
 </script>
 
 <script lang="ts">
@@ -56,6 +67,13 @@
 		<rect x="7" y="2.5" width="10" height="3.5" rx="1" />
 		<rect x="5" y="6" width="14" height="15.5" rx="4" />
 		<path d="M9 12h6M9 16h4" />
+	{:else if name === 'sun'}
+		<circle cx="12" cy="12" r="4.2" />
+		<path
+			d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"
+		/>
+	{:else if name === 'moon'}
+		<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />
 	{:else if name === 'split'}
 		<circle cx="6" cy="6" r="3" />
 		<circle cx="6" cy="18" r="3" />

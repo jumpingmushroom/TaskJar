@@ -6,6 +6,8 @@
 	import { markHydrated } from '$lib/client';
 	import favicon from '$lib/assets/favicon.svg';
 	import TabBar from '$lib/components/TabBar.svelte';
+	import { THEME_COLORS } from '$lib/theme';
+	import { setThemeContext } from '$lib/theme-context';
 
 	let { data, children } = $props();
 
@@ -13,6 +15,10 @@
 	const showTabs = $derived(TAB_SCREENS.has(page.route.id ?? ''));
 	// Home gets the two-column layout on landscape tablets (SPEC §5).
 	const wide = $derived(page.route.id === '/');
+
+	// Per request (context, not module state), so SSR never mixes up devices.
+	const themeState = $state({ forced: (() => data.theme)() });
+	setThemeContext(themeState);
 
 	onMount(markHydrated);
 
@@ -24,8 +30,12 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<meta name="theme-color" content="#FFF4E0" media="(prefers-color-scheme: light)" />
-	<meta name="theme-color" content="#17122B" media="(prefers-color-scheme: dark)" />
+	{#if themeState.forced}
+		<meta name="theme-color" content={THEME_COLORS[themeState.forced]} />
+	{:else}
+		<meta name="theme-color" content={THEME_COLORS.light} media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content={THEME_COLORS.dark} media="(prefers-color-scheme: dark)" />
+	{/if}
 </svelte:head>
 
 <svelte:document onvisibilitychange={onVisibilityChange} />

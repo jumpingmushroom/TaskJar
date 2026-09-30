@@ -148,6 +148,31 @@ test('dark theme follows the system setting', async ({ page }) => {
 	expect(bg).toBe('rgb(23, 18, 43)');
 });
 
+test('theme toggle overrides the system theme and remembers it', async ({ page }) => {
+	await page.emulateMedia({ colorScheme: 'dark' });
+	await page.goto('/');
+	const toggle = page.getByRole('button', { name: 'Dark mode' });
+	const bg = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+	await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+	expect(await bg()).toBe('rgb(23, 18, 43)');
+
+	await toggle.click();
+	await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+	expect(await bg()).toBe('rgb(255, 244, 224)');
+
+	// Remembered on this device and applied by the server (no flash).
+	await page.reload();
+	await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+	await page.goto('/jar');
+	expect(await bg()).toBe('rgb(255, 244, 224)');
+
+	// Toggling back returns to following the system.
+	await page.goto('/');
+	await page.getByRole('button', { name: 'Dark mode' }).click();
+	await expect(page.locator('html')).not.toHaveAttribute('data-theme', /.+/);
+	expect(await bg()).toBe('rgb(23, 18, 43)');
+});
+
 test('home splits into two columns on a landscape tablet', async ({ page }) => {
 	await page.setViewportSize({ width: 1180, height: 820 });
 	await page.goto('/');

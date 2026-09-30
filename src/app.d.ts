@@ -6,6 +6,8 @@ declare global {
 		interface Locals {
 			/** Who is acting. Always null until profiles and auth exist. */
 			actor: null;
+			/** Theme picked on this device, or null to follow the system. */
+			theme: import('$lib/theme').Theme | null;
 		}
 		// interface PageData {}
 		interface PageState {
