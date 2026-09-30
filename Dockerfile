@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1
 
-FROM node:24-slim AS build
+FROM node:26-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 RUN npm run build && npm prune --omit=dev
 
-FROM node:24-slim
+FROM node:26-slim
 LABEL org.opencontainers.image.source=https://github.com/jumpingmushroom/TaskJar \
       org.opencontainers.image.description="TaskJar: pull a random small task that fits your free minutes"
 WORKDIR /app
