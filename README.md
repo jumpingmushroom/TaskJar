@@ -31,7 +31,8 @@ Big chore lists are discouraging. TaskJar flips it around: you only ever see **o
 - **The 30-minute rule.** Every task takes 30 minutes or less. Bigger jobs are politely rejected ("Too big! Split it into smaller tasks.") in the UI _and_ on the server.
 - **Take it → Go! → done.** Taken tasks move to an Open list, and checking one off plays a small celebration.
 - **One shared jar.** Data lives on your server, so every phone, tablet and wall panel sees the same jar live.
-- **Made for home.** Mobile-first, a two-column layout for a landscape tablet or wall panel, dark mode that follows the system, and simple fades when "reduce motion" is on.
+- **Made for home.** Mobile-first, with wide layouts for a landscape tablet, wall panel or desktop, and simple fades when "reduce motion" is on.
+- **Light and dark.** Follows the system by default. The sun/moon button on the home screen overrides it for that device.
 - **Self-hosted and private.** One small container with SQLite, and no accounts or cloud services.
 
 ## Screenshots
@@ -53,6 +54,9 @@ Big chore lists are discouraging. TaskJar flips it around: you only ever see **o
     <td align="center"><img src="docs/screenshots/home-dark.png" width="200" alt="Home in dark mode"><br><sub>Dark mode</sub></td>
     <td align="center"><img src="docs/screenshots/open-dark.png" width="200" alt="Open tasks in dark mode"><br><sub>Dark mode</sub></td>
     <td align="center" colspan="2"><img src="docs/screenshots/tablet.png" width="420" alt="Two-column home on a landscape tablet"><br><sub>Tablet and wall panel</sub></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="4"><img src="docs/screenshots/desktop-jar.png" width="860" alt="The jar on a desktop, three columns of tasks in dark mode"><br><sub>Desktop</sub></td>
   </tr>
 </table>
 
