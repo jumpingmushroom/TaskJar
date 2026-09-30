@@ -16,7 +16,12 @@ export default defineConfig({
 		// Production build against a fresh, throwaway database.
 		command: 'rm -rf .e2e && npm run build && node build',
 		port: PORT,
-		env: { PORT: String(PORT), DATABASE_URL: '.e2e/taskjar.db' },
+		env: {
+			PORT: String(PORT),
+			DATABASE_URL: '.e2e/taskjar.db',
+			// adapter-node assumes https without it, and form actions fail the CSRF check.
+			ORIGIN: `http://localhost:${PORT}`
+		},
 		reuseExistingServer: false,
 		timeout: 180_000
 	}
