@@ -89,7 +89,7 @@ jobs:
       - name: Unraid template ships in the image and is valid XML
         run: |
           docker run --rm --entrypoint cat taskjar:latest /app/unraid/taskjar.xml > taskjar.xml
-          xmllint --noout taskjar.xml
+          python3 -c "import sys, xml.etree.ElementTree as ET; r = ET.parse('taskjar.xml').getroot(); assert r.findtext('Repository') == 'ghcr.io/jumpingmushroom/taskjar:latest'"
           docker run --rm --entrypoint cat taskjar:latest /app/unraid/icon.png | file - | grep -q PNG
       - name: Logs
         if: always()
