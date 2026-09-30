@@ -13,6 +13,8 @@
   <a href="https://github.com/jumpingmushroom/TaskJar/actions/workflows/ci.yml"><img src="https://github.com/jumpingmushroom/TaskJar/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/jumpingmushroom/TaskJar/pkgs/container/taskjar"><img src="https://img.shields.io/badge/image-ghcr.io%2Fjumpingmushroom%2Ftaskjar-FF8A3D" alt="Container image"></a>
   <img src="https://img.shields.io/badge/self--hosted-Unraid%20%7C%20Docker-4CC9F0" alt="Self-hosted on Unraid or Docker">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3DDC97" alt="MIT license"></a>
+  <a href="https://buymeacoffee.com/jumpingmushroom"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFD23F?logo=buymeacoffee&logoColor=1B1433" alt="Buy me a coffee"></a>
 </p>
 
 ---
@@ -155,3 +157,13 @@ Planned after the MVP, roughly in this order:
 - **People:** profiles, assignees ("anyone" or a person), and a household draw.
 - **Seasonal tasks and ordered sequences:** a big job split into parts that unlock in order.
 - **Wall panel:** a Home Assistant card that opens TaskJar.
+
+## Support
+
+If TaskJar gets a few more chores done in your home, you can buy me a coffee:
+
+<a href="https://buymeacoffee.com/jumpingmushroom"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-FFD23F?style=for-the-badge&logo=buymeacoffee&logoColor=1B1433" alt="Buy me a coffee"></a>
+
+## License
+
+[MIT](LICENSE) © Johnny Dalen
