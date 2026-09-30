@@ -7,7 +7,7 @@
 
 	let { data } = $props();
 
-	/** How long Go! stays up before moving on to Open tasks (SPEC §4.5). */
+	/** How long Go! stays up before moving on to Open tasks. */
 	const GO_MS = 1800;
 
 	onMount(() => {

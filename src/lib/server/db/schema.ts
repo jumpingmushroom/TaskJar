@@ -21,7 +21,7 @@ export const task = sqliteTable(
 			.$defaultFn(() => new Date()),
 		takenAt: integer('taken_at', { mode: 'timestamp_ms' }),
 		doneAt: integer('done_at', { mode: 'timestamp_ms' }),
-		// Shared skip counter; the basis for "forcing" later (SPEC §7).
+		// Shared skip counter; the basis for "forcing" later (see the roadmap).
 		skipCount: integer('skip_count').notNull().default(0)
 	},
 	(t) => [

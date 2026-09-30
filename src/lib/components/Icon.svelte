@@ -15,7 +15,7 @@
 </script>
 
 <script lang="ts">
-	/** Inline stroke icons from the design (DESIGN §4). Decorative: label the button instead. */
+	/** Inline stroke icons from the design. Decorative: label the button instead. */
 	let {
 		name,
 		size = 24,

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-/** Smoke test for the SPEC §9 acceptance checklist, run in order on one fresh jar. */
+/** Smoke test of the MVP acceptance checklist, run in order on one fresh jar. */
 test.describe.configure({ mode: 'serial' });
 
 async function addTask(page: Page, title: string, minutes: number) {

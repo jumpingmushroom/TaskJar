@@ -9,7 +9,7 @@
 
 	let { data } = $props();
 
-	// Tile styling per button (DESIGN §4): tilt, height and number size grow with time.
+	// Tile styling per button: tilt, height and number size grow with time.
 	const tiles = DRAW_OPTIONS.map((n, i) => ({
 		n,
 		rotate: [-1, 0.8, -0.6][i],
@@ -202,7 +202,7 @@
 		font-weight: 700;
 	}
 
-	/* Tablet / wall panel, landscape (DESIGN §7): intro on the left, the tiles
+	/* Tablet / wall panel, landscape: intro on the left, the tiles
 	   stacked large on the right, sharing the height in the 180:224:268 ratio. */
 	@media (min-width: 1024px) and (orientation: landscape) {
 		.home {
