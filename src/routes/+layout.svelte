@@ -13,8 +13,10 @@
 
 	const TAB_SCREENS = new Set(['/', '/open', '/jar']);
 	const showTabs = $derived(TAB_SCREENS.has(page.route.id ?? ''));
-	// Home gets the two-column layout on landscape tablets (SPEC §5).
-	const wide = $derived(page.route.id === '/');
+	// Tab screens use the full width on landscape tablets and desktops; Home
+	// also fills the viewport height for its two-column layout (SPEC §5).
+	const wide = $derived(showTabs);
+	const fill = $derived(page.route.id === '/');
 
 	// Per request (context, not module state), so SSR never mixes up devices.
 	const themeState = $state({ forced: (() => data.theme)() });
@@ -40,7 +42,7 @@
 
 <svelte:document onvisibilitychange={onVisibilityChange} />
 
-<div class="app" class:wide>
+<div class="app" class:wide class:fill>
 	<main>
 		{@render children()}
 	</main>
@@ -62,6 +64,9 @@
 	@media (min-width: 1024px) and (orientation: landscape) {
 		.app.wide {
 			max-width: none;
+		}
+
+		.app.fill {
 			height: 100dvh;
 		}
 	}

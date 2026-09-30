@@ -36,7 +36,7 @@
 	<title>Open tasks · TaskJar</title>
 </svelte:head>
 
-<section class="screen">
+<section class="screen list-screen">
 	<h1 class="title heading" tabindex="-1" bind:this={heading}>Open tasks</h1>
 	<p class="subline">Tap the check when it's done.</p>
 
@@ -179,6 +179,19 @@
 		border: 4px dashed var(--done);
 		border-radius: 50%;
 		pointer-events: none;
+	}
+
+	@media (min-width: 1024px) and (orientation: landscape) {
+		.heading {
+			margin-top: 0;
+		}
+
+		.list {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+			gap: 18px;
+			margin-top: 32px;
+		}
 	}
 
 	.all-done {

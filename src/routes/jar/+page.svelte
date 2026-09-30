@@ -14,7 +14,7 @@
 	<title>The jar · TaskJar</title>
 </svelte:head>
 
-<section class="screen">
+<section class="screen list-screen">
 	<div class="screen-header heading">
 		<h1 class="title">The jar</h1>
 		<a class="press add" href={resolve('/jar/new')}>
@@ -107,6 +107,32 @@
 
 	.edit:hover {
 		filter: brightness(0.97);
+	}
+
+	@media (min-width: 1024px) and (orientation: landscape) {
+		.heading {
+			margin-top: 0;
+		}
+
+		.add {
+			height: 56px;
+			padding: 0 22px;
+			border-radius: 18px;
+			box-shadow: var(--shadow);
+			font-size: 18px;
+		}
+
+		.list {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+			gap: 14px;
+			margin-top: 32px;
+		}
+
+		.empty {
+			max-width: 560px;
+			margin: 64px auto 0;
+		}
 	}
 
 	.empty {

@@ -328,6 +328,27 @@ button {
 	min-height: 48px;
 }
 
+/* List screens (Open, Jar) on landscape tablets and desktops: a wide, centred
+   page with larger type; each screen lays its rows out in a grid. */
+@media (min-width: 1024px) and (orientation: landscape) {
+	.screen.list-screen {
+		width: 100%;
+		max-width: 1280px;
+		margin: 0 auto;
+		padding: 56px 56px 40px;
+	}
+
+	.list-screen .title {
+		font-size: 56px;
+		letter-spacing: -1.8px;
+	}
+
+	.list-screen .subline {
+		margin-top: 14px;
+		font-size: 20px;
+	}
+}
+
 /* ---------- Motion ---------- */
 
 @keyframes tj-pop {
