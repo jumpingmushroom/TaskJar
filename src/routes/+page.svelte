@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import Icon from '$lib/components/Icon.svelte';
 	import Logo from '$lib/components/Logo.svelte';
+	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 	import { DRAW_OPTIONS } from '$lib/draw';
 	import { durationColor } from '$lib/ui';
 
@@ -26,9 +27,12 @@
 	<div class="intro">
 		<div class="screen-header">
 			<Logo />
-			<a class="press icon-btn add" href={resolve('/jar/new')} aria-label="Add a task">
-				<Icon name="plus" />
-			</a>
+			<div class="header-actions">
+				<ThemeToggle />
+				<a class="press icon-btn add" href={resolve('/jar/new')} aria-label="Add a task">
+					<Icon name="plus" />
+				</a>
+			</div>
 		</div>
 		<h1 class="title headline">How much time do you have?</h1>
 		<p class="subline lead">Pick one. We'll pull a task from the jar.</p>
@@ -75,6 +79,11 @@
 <style>
 	.home {
 		padding-bottom: 28px;
+	}
+
+	.header-actions {
+		display: flex;
+		gap: 10px;
 	}
 
 	.add {
