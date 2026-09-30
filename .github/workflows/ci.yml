@@ -51,8 +51,8 @@ jobs:
       - name: Smoke test the running container
         run: |
           set -e
-          post() { curl -s -o /dev/null -w '%{http_code}' -H 'Origin: http://localhost:3000' -X POST "http://localhost:3000$1" -d "$2"; }
-          # Valid task: redirect after save.
+          post() { curl -s -o /dev/null -w '%{http_code}' -H 'Accept: text/html' -H 'Origin: http://localhost:3000' -X POST "http://localhost:3000$1" -d "$2"; }
+          # Plain browser form posts (Accept: text/html). Valid task: redirect after save.
           [ "$(post /jar/new 'title=Water the plants&minutes=5')" = 303 ]
           # The 30-minute rule on the server.
           [ "$(post /jar/new 'title=Too big&minutes=45')" = 400 ]
