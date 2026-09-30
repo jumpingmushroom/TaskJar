@@ -80,8 +80,8 @@ test('draws only fitting tasks; skip excludes; nothing else fits', async ({ page
 	await page.goto('/');
 	await expect(page.getByText('3 in the jar')).toBeVisible();
 	await page.getByRole('button', { name: 'Up to 5 minutes' }).click();
-	await expect(page.getByText('Shuffling…')).toBeVisible();
-	await expect(page.getByText('Your task')).toBeVisible();
+	await expect(page.getByText('Shuffling…', { exact: true })).toBeVisible();
+	await expect(page.getByText('Your task', { exact: true })).toBeVisible();
 	await expect(page.locator('.task-title')).toHaveText('Water the plants');
 	await expect(page.getByText('5 min or less')).toBeVisible();
 
@@ -100,7 +100,7 @@ test('take it → Go! → open tasks → done', async ({ page }) => {
 
 	await page.getByRole('button', { name: 'Take it' }).click();
 	await expect(page.getByRole('heading', { name: 'Go!' })).toBeVisible();
-	await expect(page.getByText('You took')).toBeVisible();
+	await expect(page.getByText('You took', { exact: true })).toBeVisible();
 	// Advances on its own after about 1.8 s.
 	await expect(page).toHaveURL('/open', { timeout: 4000 });
 	await expect(page.locator('.row-title')).toHaveText([title!]);
@@ -131,8 +131,8 @@ test('reduced motion skips the shuffle', async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce' });
 	await page.goto('/');
 	await page.getByRole('button', { name: 'Up to 30 minutes' }).click();
-	await expect(page.getByText('Your task')).toBeVisible();
-	await expect(page.getByText('Shuffling…')).toHaveCount(0);
+	await expect(page.getByText('Your task', { exact: true })).toBeVisible();
+	await expect(page.getByText('Shuffling…', { exact: true })).toHaveCount(0);
 	const animation = await page
 		.locator('.card-slot > .card')
 		.evaluate((el) => getComputedStyle(el).animationName);
