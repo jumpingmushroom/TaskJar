@@ -10,6 +10,7 @@ Household "task jar" web app: add small tasks (1–30 min), pick how much time y
 - `npm run check`: svelte-check / TypeScript
 - `npm run lint` / `npm run format`: Prettier + ESLint
 - `npm run build`: production build (`adapter-node`, output in `build/`)
+- Screenshots in `docs/screenshots/` are real captures of the app (390×844 at 2×). Retake them when the UI changes visibly.
 - `npm run db:generate`: generate a migration in `drizzle/` after changing `src/lib/server/db/schema.ts` (commit both). Migrations run automatically at server start.
 
 Run `npm run check`, `npm run lint` and `npm test` before opening a PR.
@@ -38,6 +39,8 @@ Run `npm run check`, `npm run lint` and `npm test` before opening a PR.
 - PRs are **squash-merged** (the repo only allows squash merges). The PR title becomes the commit on `main`, so it must be a conventional commit.
 - Keep PRs small and reviewable: one step of the plan per PR.
 - **Conventional Commits** for commit messages and PR titles: `type(scope): summary`, imperative, lower case, no trailing period. Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`, `build`, `ci`.
+- Label every PR with one type label (`enhancement`, `bug`, `documentation`, `chore`, `ci`, `dependencies`) plus the matching `area: …` label(s). Release notes are grouped by these (`.github/release.yml`). `roadmap: …` labels mark planned post-MVP features.
+- Releases: bump `version` in `package.json`, merge, then tag `vX.Y.Z` on `main` and run `gh release create vX.Y.Z --generate-notes`. The tag publishes `X.Y.Z` and `X.Y` image tags.
 - **No AI attribution** anywhere in commits or PRs: no `Co-Authored-By` trailers for AI tools, no "Generated with …" lines, no emoji signatures.
 
 ## Design handoff (local only)
