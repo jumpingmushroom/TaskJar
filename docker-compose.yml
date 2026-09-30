@@ -1,0 +1,17 @@
+services:
+  taskjar:
+    build: .
+    image: taskjar:latest
+    restart: unless-stopped
+    init: true
+    environment:
+      # The exact URL people open the app on, e.g. http://taskjar.home.lan or
+      # http://192.168.1.20:3000. Form actions are rejected (403) without it.
+      ORIGIN: ${ORIGIN:?Set ORIGIN to the URL you open TaskJar on}
+    ports:
+      - '${PORT:-3000}:3000'
+    volumes:
+      - taskjar-data:/data
+
+volumes:
+  taskjar-data:

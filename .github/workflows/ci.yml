@@ -29,3 +29,46 @@ jobs:
             playwright-report
             test-results
           retention-days: 7
+
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build image
+        run: docker build -t taskjar:latest .
+      - name: Start with Compose
+        env:
+          ORIGIN: http://localhost:3000
+        run: |
+          docker compose up -d --no-build
+          for i in $(seq 1 30); do
+            [ "$(docker inspect -f '{{.State.Health.Status}}' "$(docker compose ps -q taskjar)")" = healthy ] && break
+            sleep 2
+          done
+          docker compose ps
+          curl -fsS http://localhost:3000/healthz
+      - name: Smoke test the running container
+        run: |
+          set -e
+          post() { curl -s -o /dev/null -w '%{http_code}' -H 'Accept: text/html' -H 'Origin: http://localhost:3000' -X POST "http://localhost:3000$1" -d "$2"; }
+          # Plain browser form posts (Accept: text/html). Valid task: redirect after save.
+          [ "$(post /jar/new 'title=Water the plants&minutes=5')" = 303 ]
+          # The 30-minute rule on the server.
+          [ "$(post /jar/new 'title=Too big&minutes=45')" = 400 ]
+          # Wrong origin is rejected, so ORIGIN matters.
+          [ "$(curl -s -o /dev/null -w '%{http_code}' -H 'Origin: http://evil.example' -X POST http://localhost:3000/jar/new -d 'title=x&minutes=5')" = 403 ]
+          curl -fsS http://localhost:3000/jar | grep -q 'Water the plants'
+      - name: Data survives a restart
+        env:
+          ORIGIN: http://localhost:3000
+        run: |
+          docker compose down
+          docker compose up -d --no-build
+          sleep 5
+          curl -fsS http://localhost:3000/jar | grep -q 'Water the plants'
+      - name: Logs
+        if: always()
+        env:
+          ORIGIN: http://localhost:3000
+        run: docker compose logs
