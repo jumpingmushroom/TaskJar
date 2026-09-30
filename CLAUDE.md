@@ -6,6 +6,7 @@ Household "task jar" web app: add small tasks (1–30 min), pick how much time y
 
 - `npm run dev`: dev server
 - `npm test`: unit tests (Vitest, run once)
+- `npm run test:e2e`: Playwright smoke test of the SPEC §9 checklist against a production build with a throwaway DB. Needs Chromium's system libraries; if they're missing locally, rely on CI (`.github/workflows/ci.yml` runs check, lint, unit and e2e on every PR).
 - `npm run check`: svelte-check / TypeScript
 - `npm run lint` / `npm run format`: Prettier + ESLint
 - `npm run build`: production build (`adapter-node`, output in `build/`)
@@ -20,6 +21,10 @@ Run `npm run check`, `npm run lint` and `npm test` before opening a PR.
 - `src/lib/server/db/`: Drizzle schema and `getDb()` (SQLite via better-sqlite3; `DATABASE_URL` is a file path, default `data/taskjar.db`)
 - `src/lib/server/tasks.ts`, `src/lib/server/draws.ts`: repositories; routes never query the DB directly
 - Repository tests use `openDb(':memory:')`, which applies the real migrations
+
+## Deployment gotcha
+
+`adapter-node` assumes `https://` unless `ORIGIN` is set, and SvelteKit then rejects every form action as cross-site (403). Always set `ORIGIN` to the exact URL users open. The dev server is not affected, so this only shows up in production builds.
 
 ## Git workflow
 
