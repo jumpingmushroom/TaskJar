@@ -6,7 +6,7 @@
 import { and, eq, lt, sql } from 'drizzle-orm';
 import { draw as pick, type DrawMinutes, type Rng } from '../draw';
 import type { Db } from './db';
-import { draw, task, type Task } from './db/schema';
+import { draw, task, type Draw, type Task } from './db/schema';
 
 /** Pending draws older than this are treated as abandoned. */
 export const STALE_DRAW_MS = 60 * 60 * 1000;
@@ -141,4 +141,41 @@ export function expireStaleDraws(db: Db, now = new Date()): number {
 			and(eq(draw.outcome, 'pending'), lt(draw.createdAt, new Date(now.getTime() - STALE_DRAW_MS)))
 		)
 		.run().changes;
+}
+
+export interface DrawView {
+	draw: Draw;
+	minutes: DrawMinutes;
+	task: Task | null;
+	afterSkip: boolean;
+}
+
+/** A draw with its task, for the reveal screen. */
+export function getDrawView(db: Db, drawId: number): DrawView | undefined {
+	const row = db.select().from(draw).where(eq(draw.id, drawId)).get();
+	if (!row) return undefined;
+	const drawn =
+		row.taskId === null ? undefined : db.select().from(task).where(eq(task.id, row.taskId)).get();
+	const skippedBefore = db
+		.select({ id: draw.id })
+		.from(draw)
+		.where(and(eq(draw.sessionId, row.sessionId), eq(draw.outcome, 'skipped'), lt(draw.id, row.id)))
+		.get();
+	return {
+		draw: row,
+		minutes: row.minutesSelected as DrawMinutes,
+		task: drawn ?? null,
+		afterSkip: skippedBefore !== undefined
+	};
+}
+
+/** Random jar titles for the shuffle animation (display only, never the pick). */
+export function shuffleSample(db: Db, limit = 12) {
+	return db
+		.select({ title: task.title, minutes: task.minutes })
+		.from(task)
+		.where(eq(task.status, 'jar'))
+		.orderBy(sql`random()`)
+		.limit(limit)
+		.all();
 }
