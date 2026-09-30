@@ -10,6 +10,10 @@ updates:
     groups:
       dev-dependencies:
         dependency-type: development
+    ignore:
+      # Types must match the Node runtime in the Dockerfile; bump both together on purpose.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -21,6 +25,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Stay on the current LTS line; move to the next major deliberately.
+      - dependency-name: node
+        update-types: ['version-update:semver-major']
     labels: [dependencies]
     commit-message:
       prefix: build(deps)
