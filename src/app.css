@@ -462,3 +462,13 @@ button {
 		transform: none !important;
 	}
 }
+
+/* Header with a back button and a title (Add/Edit). */
+.screen-header.start {
+	justify-content: flex-start;
+}
+
+.form-title {
+	font-size: 32px;
+	letter-spacing: -0.8px;
+}
