@@ -1,0 +1,202 @@
+{
+	"version": "6",
+	"dialect": "sqlite",
+	"id": "2a395997-b1d9-48dd-b411-9f3b5f7474cf",
+	"prevId": "00000000-0000-0000-0000-000000000000",
+	"tables": {
+		"draw": {
+			"name": "draw",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"session_id": {
+					"name": "session_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"minutes_selected": {
+					"name": "minutes_selected",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"task_id": {
+					"name": "task_id",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"outcome": {
+					"name": "outcome",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "'pending'"
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"resolved_at": {
+					"name": "resolved_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				}
+			},
+			"indexes": {
+				"draw_session_idx": {
+					"name": "draw_session_idx",
+					"columns": ["session_id"],
+					"isUnique": false
+				},
+				"draw_outcome_idx": {
+					"name": "draw_outcome_idx",
+					"columns": ["outcome"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {
+				"draw_task_id_task_id_fk": {
+					"name": "draw_task_id_task_id_fk",
+					"tableFrom": "draw",
+					"tableTo": "task",
+					"columnsFrom": ["task_id"],
+					"columnsTo": ["id"],
+					"onDelete": "set null",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {
+				"draw_minutes_values": {
+					"name": "draw_minutes_values",
+					"value": "\"draw\".\"minutes_selected\" IN (5, 15, 30)"
+				},
+				"draw_outcome_values": {
+					"name": "draw_outcome_values",
+					"value": "\"draw\".\"outcome\" IN ('pending', 'taken', 'skipped', 'abandoned', 'empty')"
+				}
+			}
+		},
+		"task": {
+			"name": "task",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"title": {
+					"name": "title",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"minutes": {
+					"name": "minutes",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"status": {
+					"name": "status",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "'jar'"
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"taken_at": {
+					"name": "taken_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"done_at": {
+					"name": "done_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"skip_count": {
+					"name": "skip_count",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": 0
+				}
+			},
+			"indexes": {
+				"task_status_idx": {
+					"name": "task_status_idx",
+					"columns": ["status"],
+					"isUnique": false
+				}
+			},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {
+				"task_minutes_range": {
+					"name": "task_minutes_range",
+					"value": "\"task\".\"minutes\" BETWEEN 1 AND 30"
+				},
+				"task_title_length": {
+					"name": "task_title_length",
+					"value": "length(trim(\"task\".\"title\")) BETWEEN 1 AND 120"
+				},
+				"task_status_values": {
+					"name": "task_status_values",
+					"value": "\"task\".\"status\" IN ('jar', 'open', 'done')"
+				}
+			}
+		}
+	},
+	"views": {},
+	"enums": {},
+	"_meta": {
+		"schemas": {},
+		"tables": {},
+		"columns": {}
+	},
+	"internal": {
+		"indexes": {}
+	}
+}

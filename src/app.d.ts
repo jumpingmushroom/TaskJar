@@ -3,7 +3,10 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			/** Who is acting. Always null until profiles and auth exist. */
+			actor: null;
+		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
