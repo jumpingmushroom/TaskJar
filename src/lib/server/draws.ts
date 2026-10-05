@@ -28,7 +28,10 @@ export class DrawStateError extends Error {
 	}
 }
 
-export type TakeResult = { ok: true; task: Task } | { ok: false; reason: 'gone' };
+export type TakeResult =
+	| { ok: true; task: Task }
+	/** The task left the jar first; `next` is a new pull in the same session. */
+	| { ok: false; reason: 'taken' | 'deleted'; next: DrawResult };
 
 interface Options {
 	rng?: Rng;
@@ -101,10 +104,12 @@ export function skipDraw(db: Db, drawId: number, options: Options = {}): DrawRes
 }
 
 /**
- * Takes the drawn task: jar → open. Fails with `gone` when the task left the
- * jar in the meantime (taken on another device, or deleted).
+ * Takes the drawn task: jar → open. When the task left the jar in the
+ * meantime (taken on another device, or deleted), the draw is abandoned and
+ * the same session pulls again, so its skips still count.
  */
-export function takeDraw(db: Db, drawId: number, now = new Date()): TakeResult {
+export function takeDraw(db: Db, drawId: number, options: Options = {}): TakeResult {
+	const now = options.now ?? new Date();
 	return db.transaction(() => {
 		const current = pendingDraw(db, drawId);
 		const taken =
@@ -120,7 +125,15 @@ export function takeDraw(db: Db, drawId: number, now = new Date()): TakeResult {
 			.set({ outcome: taken ? 'taken' : 'abandoned', resolvedAt: now })
 			.where(eq(draw.id, drawId))
 			.run();
-		return taken ? { ok: true, task: taken } : { ok: false, reason: 'gone' };
+		if (taken) return { ok: true, task: taken };
+		// Deleting a task clears the draw's task_id (ON DELETE SET NULL).
+		const reason = current.taskId === null ? 'deleted' : 'taken';
+		const afterSkip = getDrawView(db, drawId)!.afterSkip;
+		const next = pull(db, current.minutesSelected as DrawMinutes, current.sessionId, afterSkip, {
+			...options,
+			now
+		});
+		return { ok: false, reason, next };
 	});
 }
 

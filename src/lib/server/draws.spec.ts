@@ -101,27 +101,55 @@ describe('takeDraw', () => {
 		createTask(db, { title: 'A', minutes: 5 });
 		const result = startDraw(db, 5);
 		const now = new Date('2026-09-30T08:00:00Z');
-		const taken = takeDraw(db, result.drawId, now);
+		const taken = takeDraw(db, result.drawId, { now });
 		expect(taken).toMatchObject({ ok: true, task: { status: 'open', takenAt: now } });
 		expect(drawRow(result.drawId).outcome).toBe('taken');
 		expect(() => takeDraw(db, result.drawId)).toThrow(DrawStateError);
 	});
 
-	it('reports gone when another device took the task first', () => {
+	it('reports taken when another device took the task first, and pulls again', () => {
 		createTask(db, { title: 'A', minutes: 5 });
-		const phone = startDraw(db, 5);
-		const tablet = startDraw(db, 5);
+		const b = createTask(db, { title: 'B', minutes: 5 });
+		const phone = startDraw(db, 5, { rng: () => 0 });
+		const tablet = startDraw(db, 5, { rng: () => 0 });
 		expect(takeDraw(db, tablet.drawId).ok).toBe(true);
-		expect(takeDraw(db, phone.drawId)).toEqual({ ok: false, reason: 'gone' });
+		const result = takeDraw(db, phone.drawId);
+		expect(result).toMatchObject({ ok: false, reason: 'taken' });
 		expect(drawRow(phone.drawId).outcome).toBe('abandoned');
+		if (result.ok) return;
+		expect(result.next.task?.id).toBe(b.id);
+		expect(result.next.sessionId).toBe(phone.sessionId);
 	});
 
-	it('reports gone when the task was deleted', () => {
+	it('reports deleted when the task was deleted', () => {
 		const t = createTask(db, { title: 'A', minutes: 5 });
 		const result = startDraw(db, 5);
 		deleteTask(db, t.id);
 		expect(drawRow(result.drawId).taskId).toBeNull();
-		expect(takeDraw(db, result.drawId)).toEqual({ ok: false, reason: 'gone' });
+		expect(takeDraw(db, result.drawId)).toMatchObject({
+			ok: false,
+			reason: 'deleted',
+			next: { task: null }
+		});
+	});
+
+	it('keeps the skips of the session when it pulls again', () => {
+		const a = createTask(db, { title: 'A', minutes: 5 });
+		const b = createTask(db, { title: 'B', minutes: 5 });
+		const c = createTask(db, { title: 'C', minutes: 5 });
+		const first = startDraw(db, 5, { rng: () => 0 });
+		expect(first.task?.id).toBe(a.id);
+		const second = skipDraw(db, first.drawId, { rng: () => 0 });
+		expect(second.task?.id).toBe(b.id);
+		// Another device takes B before this one does.
+		const other = startDraw(db, 5, { rng: () => 0.5 });
+		expect(other.task?.id).toBe(b.id);
+		expect(takeDraw(db, other.drawId).ok).toBe(true);
+		const result = takeDraw(db, second.drawId, { rng: () => 0 });
+		if (result.ok) throw new Error('expected the take to fail');
+		// A was skipped in this session and B is gone: only C is left.
+		expect(result.next.task?.id).toBe(c.id);
+		expect(result.next.afterSkip).toBe(true);
 	});
 });
 

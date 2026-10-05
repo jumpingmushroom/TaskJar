@@ -6,10 +6,13 @@ import {
 	getDrawView,
 	shuffleSample,
 	skipDraw,
-	startDraw,
 	takeDraw
 } from '$lib/server/draws';
 import type { Actions, PageServerLoad } from './$types';
+
+function parseGone(value: string | null): 'taken' | 'deleted' | null {
+	return value === 'taken' || value === 'deleted' ? value : null;
+}
 
 export const load: PageServerLoad = ({ params, url }) => {
 	const db = getDb();
@@ -27,8 +30,8 @@ export const load: PageServerLoad = ({ params, url }) => {
 		task: view.task && { id: view.task.id, title: view.task.title, minutes: view.task.minutes },
 		afterSkip: view.afterSkip,
 		sample: view.task ? shuffleSample(db) : [],
-		// Set when the previous pick was taken on another device first.
-		gone: url.searchParams.has('gone')
+		// Set when the previous pick left the jar before it could be taken.
+		gone: parseGone(url.searchParams.get('gone'))
 	};
 };
 
@@ -43,19 +46,16 @@ export const actions: Actions = {
 		}
 	},
 	take: ({ params }) => {
-		const db = getDb();
-		const id = Number(params.id);
 		let result;
 		try {
-			result = takeDraw(db, id);
+			result = takeDraw(getDb(), Number(params.id));
 		} catch (e) {
 			if (e instanceof DrawStateError) redirect(303, '/');
 			throw e;
 		}
 		if (result.ok) redirect(303, `/go/${result.task.id}`);
-		// Someone else got there first: pull again for the same time.
-		const minutes = getDrawView(db, id)!.minutes;
-		redirect(303, `/draw/${startDraw(db, minutes).drawId}?gone`);
+		// The task left the jar first: show the pull the session made instead.
+		redirect(303, `/draw/${result.next.drawId}?gone=${result.reason}`);
 	},
 	back: ({ params }) => {
 		abandonDraw(getDb(), Number(params.id));
