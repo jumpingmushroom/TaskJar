@@ -28,7 +28,7 @@
 		task: (Shown & { id: number }) | null;
 		afterSkip: boolean;
 		sample: Shown[];
-		gone: boolean;
+		gone: 'taken' | 'deleted' | null;
 	} = $props();
 
 	const SHUFFLE_TICKS = 8;
@@ -106,7 +106,10 @@
 			{#if task && phase === 'landed'}Your task: {task.title}, {task.minutes} minutes.{/if}
 		</p>
 		{#if gone}
-			<p class="gone pop-in" role="status">Someone else took that one. Here's another.</p>
+			<p class="gone pop-in" role="status">
+				{gone === 'taken' ? 'Someone else took that one.' : 'That one was removed from the jar.'}
+				{#if task}Here's another.{/if}
+			</p>
 		{/if}
 
 		<div class="jar">
