@@ -3,10 +3,10 @@
 	 * The jar illustration: `open` has the lid popped off (reveal), `closed`
 	 * has the lid on and a small smiley (nothing fits).
 	 */
-	let { variant = 'open', width = 200 }: { variant?: 'open' | 'closed'; width?: number } = $props();
+	let { variant = 'open' }: { variant?: 'open' | 'closed' } = $props();
 </script>
 
-<svg {width} height={width * 0.95} viewBox="0 0 240 228" aria-hidden="true">
+<svg width="200" height="190" viewBox="0 0 240 228" aria-hidden="true">
 	<g stroke="var(--edge)">
 		{#if variant === 'open'}
 			<rect

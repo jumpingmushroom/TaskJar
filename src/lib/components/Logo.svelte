@@ -1,10 +1,7 @@
-<script lang="ts">
-	/** The mini jar logo with the wordmark. */
-	let { size = 36, wordmark = true }: { size?: number; wordmark?: boolean } = $props();
-</script>
+<!-- The mini jar logo with the wordmark. -->
 
 <span class="logo">
-	<svg width={size} height={size} viewBox="0 0 36 36" aria-hidden="true">
+	<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
 		<g stroke="var(--edge)">
 			<rect x="10" y="2.5" width="16" height="6" rx="2" fill="var(--primary)" stroke-width="2.5" />
 			<rect
@@ -48,7 +45,7 @@
 			/>
 		</g>
 	</svg>
-	{#if wordmark}<span class="disp wordmark" style:font-size="{size * 0.72}px">TaskJar</span>{/if}
+	<span class="disp wordmark">TaskJar</span>
 </span>
 
 <style>
@@ -59,6 +56,7 @@
 	}
 
 	.wordmark {
+		font-size: 26px;
 		letter-spacing: -0.5px;
 	}
 </style>
