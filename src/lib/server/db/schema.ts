@@ -43,7 +43,6 @@ export const task = sqliteTable(
 );
 
 export const DRAW_OUTCOMES = ['pending', 'taken', 'skipped', 'abandoned', 'empty'] as const;
-export type DrawOutcome = (typeof DRAW_OUTCOMES)[number];
 
 /**
  * One pull from the jar. Pressing a time button starts a session; each skip
